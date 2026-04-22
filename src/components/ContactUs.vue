@@ -191,8 +191,8 @@ const handleSubmit = async () => {
   isSubmitting.value = true;
   submitMessage.value = '';
   
-  // Apne Scalable Node.js Backend ka URL dalein (Deployment ke baad isay change kar lijiye ga)
-  const backendURL = 'http://localhost:5000/api/contact';
+  // Vercel Serverless Function ka relative URL
+  const backendURL = '/api/contact';
 
   try {
     const response = await fetch(backendURL, {
