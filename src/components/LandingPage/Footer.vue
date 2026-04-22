@@ -11,15 +11,15 @@
           <h3 class="text-gray-800 font-extrabold text-sm">
             {{ section.title }}
           </h3>
-          <a 
+          <router-link 
             v-for="(link, index) in section.links" 
             :key="index"
-            :href="link.url"
+            :to="link.url"
             :target="link.target || '_self'"
             class="text-gray-500 text-sm font-sm hover:text-blue-600 transition-all duration-300 hover:translate-x-1"
           >
             {{ link.label }}
-          </a>
+          </router-link>
         </div>
       </div>
 
