@@ -102,9 +102,14 @@
             <label class="block text-sm font-bold text-gray-700">Purpose of Contact <span class="text-red-500">*</span></label>
             <select v-model="form.purpose" required class="w-full px-4 py-3 rounded-xl border border-gray-200 bg-white focus:ring-2 focus:ring-[#007bff] outline-none transition">
               <option value="" disabled>Select Purpose</option>
-              <option value="Partnership">Partnership</option>
               <option value="General Inquiry">General Inquiry</option>
-              <option value="Technical Support">Technical Support</option>
+              <option value="Student Programs & Events">Student Programs & Events</option>
+              <option value="Academic Partnerships">Academic Partnerships</option>
+              <option value="Corporate Partnerships">Corporate Partnerships & Sponsorships</option>
+              <option value="Volunteer & Mentorship Opportunities">Volunteer & Mentorship Opportunities</option>
+              <option value="Talent Acquisition & Hiring">Talent Acquisition & Hiring</option> 
+              <option value="Media & Press Inquiries">Media & Press Inquiries</option>
+              <option value="Other">Other</option>
             </select>
           </div>
 
