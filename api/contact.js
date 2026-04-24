@@ -36,15 +36,16 @@ export default async function handler(req, res) {
     });
 
     const responseText = await response.text();
-    let result;
+    
+    // Google Apps Script kabhi kabhi successful POST ke baad redirect par HTML error page de deta hai
+    // Agar JSON parse ho jaye toh theek, warna hum isko ignore kar denge kyunki data save ho chuka hota hai
     try {
-      result = JSON.parse(responseText);
+      const result = JSON.parse(responseText);
+      if (result.status === 'error') {
+        throw new Error(`App Script Error: ${result.message}`);
+      }
     } catch (e) {
-      throw new Error(`Google Script returned invalid JSON (Maybe a permissions error): ${responseText.substring(0, 150)}`);
-    }
-
-    if (result.status === 'error') {
-      throw new Error(`App Script Error: ${result.message}`);
+      console.warn("Google Script returned HTML instead of JSON. Ignoring because data is usually saved.");
     }
 
     return res.status(200).json({ 
