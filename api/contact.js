@@ -33,19 +33,13 @@ export default async function handler(req, res) {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify(req.body),
+      redirect: 'manual' // Prevent fetch from following the 302 redirect (which causes hanging/HTML errors)
     });
 
-    const responseText = await response.text();
-    
-    // Google Apps Script kabhi kabhi successful POST ke baad redirect par HTML error page de deta hai
-    // Agar JSON parse ho jaye toh theek, warna hum isko ignore kar denge kyunki data save ho chuka hota hai
-    try {
-      const result = JSON.parse(responseText);
-      if (result.status === 'error') {
-        throw new Error(`App Script Error: ${result.message}`);
-      }
-    } catch (e) {
-      console.warn("Google Script returned HTML instead of JSON. Ignoring because data is usually saved.");
+    // Humain Apps Script se kisi JSON jawab ki zarurat nahi kyunki POST hotay hi data save ho jata hai
+    // Agar status 200 ya 302 hai, toh iska matlab data successfully sheet mein chala gaya hai
+    if (response.status !== 200 && response.status !== 302) {
+      throw new Error(`Google Script responded with status: ${response.status}`);
     }
 
     return res.status(200).json({ 
