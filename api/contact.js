@@ -1,57 +1,50 @@
-import { GoogleSpreadsheet } from 'google-spreadsheet';
-import { JWT } from 'google-auth-library';
-
 export default async function handler(req, res) {
+  // Set CORS headers
+  res.setHeader('Access-Control-Allow-Credentials', true);
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Access-Control-Allow-Methods', 'GET,OPTIONS,PATCH,DELETE,POST,PUT');
+  res.setHeader(
+    'Access-Control-Allow-Headers',
+    'X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version'
+  );
+
+  // Handle OPTIONS request for CORS preflight
+  if (req.method === 'OPTIONS') {
+    res.status(200).end();
+    return;
+  }
+
   // Sirf POST requests ko allow karein
   if (req.method !== 'POST') {
     return res.status(405).json({ success: false, message: 'Method Not Allowed' });
   }
 
   try {
-    // Frontend se aane wala data receive karein
-    const { fullName, email, phone, organization, purpose, message } = req.body;
+    const scriptUrl = process.env.GOOGLE_SCRIPT_URL; // Vercel mein sirf ye ek variable chahiye
+    
+    if (!scriptUrl) {
+      return res.status(500).json({ success: false, message: 'Google Script URL is missing in Vercel Environment Variables.' });
+    }
 
-    // JWT Auth Client setup karein
-    const serviceAccountAuth = new JWT({
-      email: process.env.GOOGLE_CLIENT_EMAIL,
-      key: process.env.GOOGLE_PRIVATE_KEY ? process.env.GOOGLE_PRIVATE_KEY.replace(/\\n/g, '\n') : '',
-      scopes: [
-        'https://www.googleapis.com/auth/spreadsheets',
-      ],
+    // Google App Script Web App ko data bhejain
+    const response = await fetch(scriptUrl, {
+      method: 'POST',
+      body: JSON.stringify(req.body),
     });
 
-    // Google Sheets Document Initialize karein
-    const doc = new GoogleSpreadsheet(process.env.GOOGLE_SHEET_ID, serviceAccountAuth);
+    const result = await response.json();
 
-    await doc.loadInfo(); // loads document properties and worksheets
-    const sheet = doc.sheetsByIndex[0];
-
-    // Add row to Google Sheet
-    await sheet.addRow({
-        Name: fullName || '',
-        Email: email || '',
-        Phone: phone || '',
-        Organization: organization || '',
-        Purpose: purpose || '',
-        Message: message || '',
-        'Submitted At': new Date().toLocaleString('en-US', {
-            year: 'numeric',
-            month: '2-digit',
-            day: '2-digit',
-            hour: '2-digit',
-            minute: '2-digit',
-            second: '2-digit',
-            timeZone: 'Asia/Karachi'
-        })
-    });
-
-    // Frontend ko wapas success message bhej dein
     return res.status(200).json({ 
       success: true, 
       message: 'Form submitted and saved to Google Sheets successfully!' 
     });
+
   } catch (error) {
     console.error("Backend Error:", error);
-    return res.status(500).json({ success: false, message: 'Internal Server Error. Check your Vercel Environment Variables.' });
+    return res.status(500).json({ 
+      success: false, 
+      message: 'Internal Server Error while connecting to App Script.',
+      errorDetails: error.message || error.toString()
+    });
   }
 }
