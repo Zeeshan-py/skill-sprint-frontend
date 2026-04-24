@@ -29,10 +29,23 @@ export default async function handler(req, res) {
     // Google App Script Web App ko data bhejain
     const response = await fetch(scriptUrl, {
       method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
       body: JSON.stringify(req.body),
     });
 
-    const result = await response.json();
+    const responseText = await response.text();
+    let result;
+    try {
+      result = JSON.parse(responseText);
+    } catch (e) {
+      throw new Error(`Google Script returned invalid JSON (Maybe a permissions error): ${responseText.substring(0, 150)}`);
+    }
+
+    if (result.status === 'error') {
+      throw new Error(`App Script Error: ${result.message}`);
+    }
 
     return res.status(200).json({ 
       success: true, 
@@ -43,8 +56,8 @@ export default async function handler(req, res) {
     console.error("Backend Error:", error);
     return res.status(500).json({ 
       success: false, 
-      message: 'Internal Server Error while connecting to App Script.',
-      errorDetails: error.message || error.toString()
+      message: error.message || 'Internal Server Error while connecting to App Script.',
+      errorDetails: error.toString()
     });
   }
 }
