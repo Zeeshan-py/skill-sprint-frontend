@@ -21,12 +21,12 @@
             </div>
             <div>
               <h3 class="font-bold text-lg leading-tight tracking-wide drop-shadow-sm flex items-center gap-2">
-                Manus AI 
+                Skill Sprint Assistant
                 <span class="bg-white/20 text-[10px] px-1.5 py-0.5 rounded text-white backdrop-blur-sm border border-white/20">Beta</span>
               </h3>
               <p class="text-xs text-blue-100 opacity-90 flex items-center gap-1">
                 <span class="w-1.5 h-1.5 bg-emerald-400 rounded-full animate-pulse"></span>
-                Skills Print Assistant
+                Skill Sprint Assistant
               </p>
             </div>
           </div>
@@ -50,7 +50,7 @@
             </div>
             <div class="bg-white dark:bg-gray-800 p-3.5 rounded-2xl rounded-bl-sm shadow-sm border border-gray-100 dark:border-gray-700 max-w-[85%] relative">
               <p class="text-[14px] leading-relaxed text-gray-700 dark:text-gray-200">
-                Hello! 👋 I'm <span class="font-semibold bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-indigo-600">Manus AI</span>, your intelligent assistant for Skills Print.
+                Hello! 👋 I'm <span class="font-semibold bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-indigo-600">Gizmo AI</span>, your intelligent assistant for Skill Sprint.
               </p>
               <p class="text-[14px] leading-relaxed text-gray-700 dark:text-gray-200 mt-2">
                 I can help you with community insights, ROI reports, and navigating the platform. How can I assist you today?
@@ -115,7 +115,7 @@
                 I'm sorry, I cannot assist with that request. 
               </p>
               <p class="text-[14px] leading-relaxed text-gray-700 dark:text-gray-200 mt-2">
-                My knowledge is specifically confined to the <strong class="font-semibold">Skills Print</strong> platform, our internal features, community insights, and related documentation. 
+                My knowledge is specifically confined to the <strong class="font-semibold">Skill Sprint</strong> platform, our internal features, community insights, and related documentation. 
               </p>
               <p class="text-[14px] leading-relaxed text-gray-700 dark:text-gray-200 mt-2">
                 For general inquiries or topics outside this scope, please consult external resources or reach out to our <a href="/contact" class="text-indigo-600 dark:text-indigo-400 hover:underline font-medium">human support team</a>.
@@ -131,7 +131,7 @@
             <input 
               type="text" 
               v-model="inputQuery"
-              placeholder="Ask Manus AI a question..." 
+              placeholder="Ask Gizmo AI a question..." 
               class="w-full bg-transparent text-gray-800 dark:text-gray-200 text-sm py-3.5 pl-5 pr-14 focus:outline-none placeholder-gray-400"
             />
             <button 
@@ -145,7 +145,7 @@
           </form>
           <div class="text-center mt-3 flex items-center justify-center gap-1.5">
             <PhRobot :size="12" weight="fill" class="text-gray-400" />
-            <span class="text-[11px] font-medium text-gray-400">Powered by Manus AI</span>
+            <span class="text-[11px] font-medium text-gray-400">Powered by Gizmo AI</span>
           </div>
         </div>
       </div>
