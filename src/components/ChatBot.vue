@@ -1,237 +1,362 @@
 <template>
-  <div class="fixed bottom-6 right-6 z-50 flex flex-col items-end pointer-events-none">
-    <!-- Chat Window -->
-    <Transition name="chat-fade">
-      <div 
-        v-if="isOpen" 
-        class="pointer-events-auto mb-4 w-[340px] sm:w-[380px] bg-white/95 dark:bg-gray-900/95 backdrop-blur-xl border border-gray-200/50 dark:border-gray-800/50 rounded-3xl shadow-[0_20px_50px_-12px_rgba(0,0,0,0.25)] overflow-hidden flex flex-col transition-all"
-        style="height: 550px; max-height: calc(100vh - 120px);"
-      >
-        <!-- Header -->
-        <div class="bg-gradient-to-r from-blue-600 via-indigo-600 to-violet-600 p-4 text-white flex justify-between items-center shrink-0 relative overflow-hidden">
-          <!-- Abstract Background Pattern -->
-          <div class="absolute inset-0 opacity-20 bg-[url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyMCIgaGVpZ2h0PSIyMCI+PGNpcmNsZSBjeD0iMiIgY3k9IjIiIHI9IjIiIGZpbGw9IiNmZmYiLz48L3N2Zz4=')] bg-[length:20px_20px]"></div>
-          
-          <div class="flex items-center gap-3 relative z-10">
-            <div class="relative">
-              <div class="w-11 h-11 bg-white/20 rounded-xl flex items-center justify-center backdrop-blur-md border border-white/30 shadow-inner">
-                <PhRobot :size="26" weight="fill" class="text-white drop-shadow-md" />
-              </div>
-              <div class="absolute -bottom-1 -right-1 w-3.5 h-3.5 bg-emerald-400 border-2 border-indigo-600 rounded-full"></div>
+  <!-- Floating Chat Button -->
+  <button
+    v-if="!isOpen"
+    @click="openChat"
+    id="chatbot-trigger"
+    class="fixed bottom-6 right-6 z-50 w-16 h-16 rounded-full bg-gradient-to-tr from-blue-600 to-indigo-500 text-white
+           shadow-[0_8px_30px_rgb(79,70,229,0.4)] flex items-center justify-center
+           hover:shadow-[0_8px_40px_rgb(79,70,229,0.6)] hover:scale-105
+           active:scale-95 transition-all duration-300 cursor-pointer group border border-white/20"
+    aria-label="Open chat"
+  >
+    <!-- Chat icon -->
+    <svg xmlns="http://www.w3.org/2000/svg" class="w-7 h-7 group-hover:-translate-y-0.5 group-hover:scale-110 transition-all duration-300" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+      <path stroke-linecap="round" stroke-linejoin="round" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
+    </svg>
+
+    <!-- Pulse ring -->
+    <span class="absolute inset-0 rounded-full bg-indigo-500 animate-[ping_2.5s_ease-in-out_infinite] opacity-20"></span>
+  </button>
+
+  <!-- Chat Window -->
+  <Transition name="chat-pop">
+    <div
+      v-if="isOpen"
+      id="chatbot-window"
+      class="fixed bottom-6 right-6 z-50 w-[380px] max-w-[calc(100vw-2rem)]
+             bg-white rounded-[2rem] shadow-[0_20px_50px_-12px_rgba(0,0,0,0.25)]
+             flex flex-col overflow-hidden border border-gray-100 ring-1 ring-black/5"
+      style="height: 600px; max-height: calc(100vh - 3rem);"
+    >
+      <!-- Header -->
+      <div class="bg-gradient-to-r from-blue-600 via-indigo-600 to-blue-700 px-6 py-5 flex items-center justify-between shrink-0 relative overflow-hidden">
+        <!-- Abstract shapes in header -->
+        <div class="absolute top-0 right-0 -mr-8 -mt-8 w-32 h-32 rounded-full bg-white/10 blur-2xl"></div>
+        <div class="absolute bottom-0 left-0 -ml-8 -mb-8 w-24 h-24 rounded-full bg-white/10 blur-xl"></div>
+        
+        <div class="flex items-center gap-4 relative z-10">
+          <div class="relative">
+            <div class="w-12 h-12 rounded-full bg-white/20 backdrop-blur-sm border border-white/30 flex items-center justify-center shadow-inner">
+              <span class="text-2xl">🤖</span>
             </div>
-            <div>
-              <h3 class="font-bold text-lg leading-tight tracking-wide drop-shadow-sm flex items-center gap-2">
-                Skill Sprint Assistant
-                <span class="bg-white/20 text-[10px] px-1.5 py-0.5 rounded text-white backdrop-blur-sm border border-white/20">Beta</span>
-              </h3>
-              <p class="text-xs text-blue-100 opacity-90 flex items-center gap-1">
-                <span class="w-1.5 h-1.5 bg-emerald-400 rounded-full animate-pulse"></span>
-                Skill Sprint Assistant
-              </p>
+            <span class="absolute bottom-0 right-0 w-3.5 h-3.5 rounded-full bg-emerald-400 border-2 border-white"></span>
+          </div>
+          <div>
+            <h3 class="text-white font-bold text-lg tracking-wide shadow-black/10 text-shadow-sm">Gizmo</h3>
+            <div class="flex items-center gap-1.5 opacity-90">
+              <span class="text-blue-100 text-xs font-medium tracking-wider uppercase">AI Assistant</span>
             </div>
           </div>
-          <button @click="toggleChat" class="relative z-10 text-white/80 hover:text-white hover:bg-white/20 p-2 rounded-full transition-colors focus:outline-none focus:ring-2 focus:ring-white/50">
-            <PhX :size="20" weight="bold" />
+        </div>
+        <button
+          @click="closeChat"
+          id="chatbot-close"
+          class="w-10 h-10 rounded-full bg-white/10 hover:bg-white/20 flex items-center justify-center
+                 transition-all duration-200 cursor-pointer backdrop-blur-md relative z-10 hover:rotate-90"
+          aria-label="Close chat"
+        >
+          <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+          </svg>
+        </button>
+      </div>
+
+      <!-- Messages Area -->
+      <div
+        ref="messagesContainer"
+        id="chatbot-messages"
+        class="flex-1 overflow-y-auto px-5 py-6 space-y-5 bg-[#f8fafc] bg-[radial-gradient(#e5e7eb_1px,transparent_1px)] [background-size:16px_16px]"
+        style="scroll-behavior: smooth;"
+      >
+        <!-- Welcome message -->
+        <div v-if="messages.length === 0" class="flex flex-col items-center justify-center h-full text-center px-2 gap-4 mt-8">
+          <div class="w-20 h-20 rounded-3xl bg-gradient-to-br from-blue-100 to-indigo-50 flex items-center justify-center shadow-[inset_0_0_20px_rgba(255,255,255,0.5)] border border-blue-100/50 mb-2 transform hover:scale-105 transition-transform duration-500">
+            <span class="text-4xl animate-[bounce_2s_infinite]">👋</span>
+          </div>
+          <h4 class="text-gray-800 font-extrabold text-xl tracking-tight">Welcome to Skill Sprint!</h4>
+          <p class="text-gray-500 text-sm leading-relaxed max-w-[260px]">
+            I'm Gizmo. Ask me anything about our community, sprints, events, or how to get started!
+          </p>
+          <!-- Quick action buttons -->
+          <div class="flex flex-wrap justify-center gap-2 mt-4">
+            <button
+              v-for="(q, i) in quickQuestions"
+              :key="i"
+              @click="sendQuickQuestion(q)"
+              class="px-4 py-2 text-xs font-semibold rounded-xl bg-white border border-gray-200 shadow-sm
+                     text-gray-600 hover:bg-gradient-to-r hover:from-blue-50 hover:to-indigo-50 hover:text-blue-700 hover:border-blue-200 hover:shadow-md
+                     transition-all duration-300 transform hover:-translate-y-0.5 cursor-pointer"
+            >
+              {{ q }}
+            </button>
+          </div>
+        </div>
+
+        <!-- Message bubbles -->
+        <TransitionGroup name="msg-list">
+          <template v-for="(msg, i) in messages" :key="'msg-'+i">
+            <!-- User message -->
+            <div v-if="msg.role === 'user'" class="flex justify-end group">
+              <div class="max-w-[80%] bg-gradient-to-br from-blue-600 to-indigo-600 text-white px-5 py-3.5 rounded-2xl rounded-tr-sm
+                          text-[15px] leading-relaxed shadow-md shadow-blue-500/20 transform transition-all duration-300">
+                {{ msg.content }}
+              </div>
+            </div>
+
+            <!-- Bot message -->
+            <div v-else class="flex justify-start gap-3 group">
+              <div class="w-8 h-8 rounded-full bg-gradient-to-br from-blue-100 to-indigo-100 flex items-center justify-center shrink-0 mt-1 shadow-inner border border-white">
+                <span class="text-sm">🤖</span>
+              </div>
+              <div class="max-w-[80%] bg-white text-gray-800 px-5 py-3.5 rounded-2xl rounded-tl-sm
+                          text-[15px] leading-relaxed shadow-sm border border-gray-100/80 transform transition-all duration-300"
+                   v-html="formatMessage(msg.content)">
+              </div>
+            </div>
+          </template>
+
+          <!-- Typing indicator -->
+          <div v-if="isLoading" key="typing" class="flex justify-start gap-3">
+            <div class="w-8 h-8 rounded-full bg-gradient-to-br from-blue-100 to-indigo-100 flex items-center justify-center shrink-0 mt-1 shadow-inner border border-white">
+              <span class="text-sm">🤖</span>
+            </div>
+            <div class="bg-white px-5 py-4 rounded-2xl rounded-tl-sm shadow-sm border border-gray-100 flex items-center gap-2 w-fit">
+              <span class="typing-dot w-2 h-2 bg-blue-400 rounded-full"></span>
+              <span class="typing-dot w-2 h-2 bg-indigo-400 rounded-full" style="animation-delay: 0.2s"></span>
+              <span class="typing-dot w-2 h-2 bg-blue-500 rounded-full" style="animation-delay: 0.4s"></span>
+            </div>
+          </div>
+        </TransitionGroup>
+      </div>
+
+      <!-- Input Area -->
+      <div class="px-5 py-4 bg-white border-t border-gray-100 shrink-0 shadow-[0_-10px_20px_-10px_rgba(0,0,0,0.05)] relative z-10">
+        <div class="flex items-center gap-3 bg-gray-50 p-1.5 rounded-full border border-gray-200 focus-within:ring-2 focus-within:ring-blue-500/20 focus-within:border-blue-400 focus-within:bg-white transition-all duration-300">
+          <input
+            ref="chatInput"
+            v-model="inputText"
+            @keydown.enter.prevent="sendMessage"
+            id="chatbot-input"
+            type="text"
+            placeholder="Type your message..."
+            :disabled="isLoading"
+            class="flex-1 px-4 py-2.5 bg-transparent text-[15px]
+                   text-gray-800 placeholder-gray-400
+                   focus:outline-none
+                   disabled:opacity-50 transition-all duration-200"
+          />
+          <button
+            @click="sendMessage"
+            id="chatbot-send"
+            :disabled="!inputText.trim() || isLoading"
+            class="w-11 h-11 rounded-full bg-gradient-to-r from-blue-600 to-indigo-600 text-white flex items-center justify-center
+                   hover:shadow-lg hover:shadow-blue-500/30 hover:scale-105 active:scale-95 disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:scale-100 disabled:hover:shadow-none
+                   transition-all duration-300 shrink-0 cursor-pointer"
+            aria-label="Send message"
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 ml-1" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M6 12L3.269 3.126A59.768 59.768 0 0121.485 12 59.77 59.77 0 013.27 20.876L5.999 12zm0 0h7.5" />
+            </svg>
           </button>
         </div>
-
-        <!-- Chat Area -->
-        <div class="flex-1 overflow-y-auto p-5 space-y-5 bg-gradient-to-b from-gray-50/50 to-white dark:from-gray-900/50 dark:to-gray-900 scroll-smooth custom-scrollbar" ref="chatContainer">
-          
-          <!-- Date Separator -->
-          <div class="flex justify-center">
-            <span class="text-[11px] font-medium text-gray-400 bg-gray-100 dark:bg-gray-800 px-3 py-1 rounded-full border border-gray-200 dark:border-gray-700">Today</span>
-          </div>
-
-          <!-- Bot Greeting -->
-          <div class="flex items-end gap-2.5 group">
-            <div class="w-9 h-9 rounded-xl bg-gradient-to-br from-blue-500 via-indigo-500 to-violet-500 flex items-center justify-center shrink-0 shadow-md transform transition-transform group-hover:scale-105">
-              <PhRobot :size="20" weight="fill" class="text-white" />
-            </div>
-            <div class="bg-white dark:bg-gray-800 p-3.5 rounded-2xl rounded-bl-sm shadow-sm border border-gray-100 dark:border-gray-700 max-w-[85%] relative">
-              <p class="text-[14px] leading-relaxed text-gray-700 dark:text-gray-200">
-                Hello! 👋 I'm <span class="font-semibold bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-indigo-600">Gizmo AI</span>, your intelligent assistant for Skill Sprint.
-              </p>
-              <p class="text-[14px] leading-relaxed text-gray-700 dark:text-gray-200 mt-2">
-                I can help you with community insights, ROI reports, and navigating the platform. How can I assist you today?
-              </p>
-            </div>
-          </div>
-
-          <!-- Action Chips -->
-          <div class="flex flex-wrap gap-2 pl-11">
-            <button class="text-xs px-3 py-1.5 bg-blue-50 text-blue-600 hover:bg-blue-100 dark:bg-blue-900/30 dark:text-blue-400 border border-blue-200 dark:border-blue-800 rounded-full transition-colors whitespace-nowrap">
-              View ROI Report
-            </button>
-            <button class="text-xs px-3 py-1.5 bg-indigo-50 text-indigo-600 hover:bg-indigo-100 dark:bg-indigo-900/30 dark:text-indigo-400 border border-indigo-200 dark:border-indigo-800 rounded-full transition-colors whitespace-nowrap">
-              Community Growth
-            </button>
-          </div>
-
-          <!-- User Message Example -->
-          <div class="flex items-end gap-2.5 justify-end group">
-            <div class="bg-gradient-to-r from-indigo-600 to-blue-600 text-white p-3.5 rounded-2xl rounded-br-sm shadow-md max-w-[85%] transform transition-transform group-hover:scale-[1.02]">
-              <p class="text-[14px] leading-relaxed">Can you generate a report on our recent community growth and sentiment?</p>
-            </div>
-          </div>
-
-          <!-- Bot Answer (In Scope) -->
-          <div class="flex items-end gap-2.5 group">
-            <div class="w-9 h-9 rounded-xl bg-gradient-to-br from-blue-500 via-indigo-500 to-violet-500 flex items-center justify-center shrink-0 shadow-md transform transition-transform group-hover:scale-105">
-              <PhRobot :size="20" weight="fill" class="text-white" />
-            </div>
-            <div class="bg-white dark:bg-gray-800 p-3.5 rounded-2xl rounded-bl-sm shadow-sm border border-gray-100 dark:border-gray-700 max-w-[85%]">
-              <p class="text-[14px] leading-relaxed text-gray-700 dark:text-gray-200">
-                Certainly! Here is a high-level summary of your community growth for the last 30 days:
-              </p>
-              <div class="mt-3 bg-gray-50 dark:bg-gray-900 p-3 rounded-xl border border-gray-100 dark:border-gray-700">
-                <div class="flex items-center justify-between mb-2">
-                  <span class="text-xs text-gray-500 font-medium">Active Users</span>
-                  <span class="text-xs font-bold text-emerald-500">+12.4%</span>
-                </div>
-                <div class="flex items-center justify-between">
-                  <span class="text-xs text-gray-500 font-medium">Sentiment Score</span>
-                  <span class="text-xs font-bold text-indigo-500">8.7/10</span>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <!-- User Out of Scope Message -->
-          <div class="flex items-end gap-2.5 justify-end group mt-4">
-            <div class="bg-gradient-to-r from-indigo-600 to-blue-600 text-white p-3.5 rounded-2xl rounded-br-sm shadow-md max-w-[85%] transform transition-transform group-hover:scale-[1.02]">
-              <p class="text-[14px] leading-relaxed">What is the weather like in Tokyo right now? Also, can you write a python script for scraping?</p>
-            </div>
-          </div>
-
-          <!-- Bot Refusal (Out of Scope - Graceful Refusal) -->
-          <div class="flex items-end gap-2.5 group">
-            <div class="w-9 h-9 rounded-xl bg-gradient-to-br from-blue-500 via-indigo-500 to-violet-500 flex items-center justify-center shrink-0 shadow-md transform transition-transform group-hover:scale-105">
-              <PhRobot :size="20" weight="fill" class="text-white" />
-            </div>
-            <div class="bg-white dark:bg-gray-800 p-3.5 rounded-2xl rounded-bl-sm shadow-sm border border-orange-100 dark:border-orange-900/30 max-w-[85%] relative overflow-hidden">
-              <div class="absolute top-0 left-0 w-1 h-full bg-orange-400"></div>
-              <p class="text-[14px] leading-relaxed text-gray-700 dark:text-gray-200">
-                I'm sorry, I cannot assist with that request. 
-              </p>
-              <p class="text-[14px] leading-relaxed text-gray-700 dark:text-gray-200 mt-2">
-                My knowledge is specifically confined to the <strong class="font-semibold">Skill Sprint</strong> platform, our internal features, community insights, and related documentation. 
-              </p>
-              <p class="text-[14px] leading-relaxed text-gray-700 dark:text-gray-200 mt-2">
-                For general inquiries or topics outside this scope, please consult external resources or reach out to our <a href="/contact" class="text-indigo-600 dark:text-indigo-400 hover:underline font-medium">human support team</a>.
-              </p>
-            </div>
-          </div>
-
-        </div>
-
-        <!-- Input Area -->
-        <div class="p-4 bg-white dark:bg-gray-900 border-t border-gray-100 dark:border-gray-800 shrink-0">
-          <form @submit.prevent="sendMessage" class="relative flex items-center shadow-sm rounded-full bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 focus-within:ring-2 focus-within:ring-indigo-500/30 focus-within:border-indigo-500 transition-all duration-200">
-            <input 
-              type="text" 
-              v-model="inputQuery"
-              placeholder="Ask Gizmo AI a question..." 
-              class="w-full bg-transparent text-gray-800 dark:text-gray-200 text-sm py-3.5 pl-5 pr-14 focus:outline-none placeholder-gray-400"
-            />
-            <button 
-              type="submit" 
-              class="absolute right-1.5 w-9 h-9 bg-indigo-600 hover:bg-indigo-700 text-white rounded-full transition-all duration-200 flex items-center justify-center focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 shadow-md transform active:scale-95"
-              :disabled="!inputQuery.trim()"
-              :class="{'opacity-50 cursor-not-allowed hover:bg-indigo-600 hover:scale-100': !inputQuery.trim(), 'hover:-translate-y-0.5 hover:shadow-lg': inputQuery.trim()}"
-            >
-              <PhPaperPlaneRight :size="18" weight="fill" class="-ml-0.5" />
-            </button>
-          </form>
-          <div class="text-center mt-3 flex items-center justify-center gap-1.5">
-            <PhRobot :size="12" weight="fill" class="text-gray-400" />
-            <span class="text-[11px] font-medium text-gray-400">Powered by Gizmo AI</span>
-          </div>
+        <div class="flex justify-center mt-3 items-center gap-1.5">
+          <svg xmlns="http://www.w3.org/2000/svg" class="w-3 h-3 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
+          </svg>
+          <p class="text-[11px] font-medium text-gray-400 uppercase tracking-wider">
+            Powered by Skill Sprint AI
+          </p>
         </div>
       </div>
-    </Transition>
-
-    <!-- Floating Toggle Button -->
-    <button 
-      @click="toggleChat"
-      class="pointer-events-auto relative group flex items-center justify-center w-16 h-16 bg-gradient-to-r from-blue-600 via-indigo-600 to-violet-600 text-white rounded-full shadow-[0_10px_25px_-5px_rgba(79,70,229,0.5)] hover:shadow-[0_20px_35px_-5px_rgba(79,70,229,0.6)] transition-all duration-300 transform hover:-translate-y-2 focus:outline-none focus:ring-4 focus:ring-indigo-500/30"
-      :class="isOpen ? 'scale-90 opacity-0 pointer-events-none absolute' : 'scale-100 opacity-100'"
-    >
-      <PhRobot :size="32" weight="fill" class="group-hover:scale-110 group-hover:rotate-6 transition-transform duration-300 drop-shadow-md" />
-      
-      <!-- Notification Badge -->
-      <span class="absolute top-0 right-0 flex h-4 w-4">
-        <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
-        <span class="relative inline-flex rounded-full h-4 w-4 bg-red-500 border-2 border-white shadow-sm flex items-center justify-center">
-          <span class="text-[8px] font-bold text-white leading-none">1</span>
-        </span>
-      </span>
-    </button>
-  </div>
+    </div>
+  </Transition>
 </template>
 
 <script setup>
-import { ref, onMounted, nextTick, watch } from 'vue'
-import { PhRobot, PhX, PhPaperPlaneRight } from '@phosphor-icons/vue'
+import { ref, nextTick, watch } from 'vue'
 
 const isOpen = ref(false)
-const inputQuery = ref('')
-const chatContainer = ref(null)
+const isLoading = ref(false)
+const inputText = ref('')
+const messages = ref([])
+const messagesContainer = ref(null)
+const chatInput = ref(null)
 
-const toggleChat = () => {
-  isOpen.value = !isOpen.value
-  if (isOpen.value) {
-    scrollToBottom()
-  }
+const quickQuestions = [
+  'What is Skill Sprint?',
+  'How do I join?',
+  'Upcoming events?',
+  'Contact support',
+]
+
+// Determine API base URL
+const API_BASE = import.meta.env.VITE_API_BASE || ''
+
+const openChat = () => {
+  isOpen.value = true
+  nextTick(() => {
+    chatInput.value?.focus()
+  })
 }
 
-const sendMessage = () => {
-  if (!inputQuery.value.trim()) return
-  // Dummy logic to clear input
-  inputQuery.value = ''
-  scrollToBottom()
+const closeChat = () => {
+  isOpen.value = false
 }
 
 const scrollToBottom = () => {
   nextTick(() => {
-    if (chatContainer.value) {
-      chatContainer.value.scrollTop = chatContainer.value.scrollHeight
+    if (messagesContainer.value) {
+      messagesContainer.value.scrollTop = messagesContainer.value.scrollHeight
     }
   })
 }
 
-watch(isOpen, (newVal) => {
-  if (newVal) {
+const formatMessage = (text) => {
+  if (!text) return ''
+  // Convert **bold** to <strong>
+  let formatted = text.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+  // Convert line breaks
+  formatted = formatted.replace(/\n/g, '<br>')
+  return formatted
+}
+
+const sendQuickQuestion = (question) => {
+  inputText.value = question
+  sendMessage()
+}
+
+const sendMessage = async () => {
+  const text = inputText.value.trim()
+  if (!text || isLoading.value) return
+
+  // Add user message
+  messages.value.push({ role: 'user', content: text })
+  inputText.value = ''
+  isLoading.value = true
+  scrollToBottom()
+
+  try {
+    const response = await fetch(`${API_BASE}/api/chat`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        messages: messages.value.map(m => ({ role: m.role, content: m.content }))
+      }),
+    })
+
+    const data = await response.json()
+
+    if (data.success && data.reply) {
+      messages.value.push({ role: 'assistant', content: data.reply })
+    } else {
+      messages.value.push({
+        role: 'assistant',
+        content: data.message || 'Sorry, something went wrong. Please try again!'
+      })
+    }
+  } catch (error) {
+    console.error('Chat error:', error)
+    messages.value.push({
+      role: 'assistant',
+      content: 'Oops! I couldn\'t connect right now. Please check your connection and try again.'
+    })
+  } finally {
+    isLoading.value = false
     scrollToBottom()
+    nextTick(() => {
+      chatInput.value?.focus()
+    })
   }
-})
+}
+
+// Watch messages for auto-scroll
+watch(messages, () => scrollToBottom(), { deep: true })
 </script>
 
 <style scoped>
-.chat-fade-enter-active,
-.chat-fade-leave-active {
-  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-  transform-origin: bottom right;
+/* Chat pop-in animation */
+.chat-pop-enter-active {
+  animation: chatPopIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.1);
+}
+.chat-pop-leave-active {
+  animation: chatPopOut 0.3s cubic-bezier(0.55, 0.085, 0.68, 0.53);
 }
 
-.chat-fade-enter-from,
-.chat-fade-leave-to {
+@keyframes chatPopIn {
+  0% {
+    opacity: 0;
+    transform: scale(0.8) translateY(20px);
+    transform-origin: bottom right;
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+    transform-origin: bottom right;
+  }
+}
+
+@keyframes chatPopOut {
+  0% {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+    transform-origin: bottom right;
+  }
+  100% {
+    opacity: 0;
+    transform: scale(0.8) translateY(20px);
+    transform-origin: bottom right;
+  }
+}
+
+/* Message list animations */
+.msg-list-enter-active,
+.msg-list-leave-active {
+  transition: all 0.4s ease;
+}
+.msg-list-enter-from {
   opacity: 0;
-  transform: scale(0.9) translateY(20px);
+  transform: translateY(15px) scale(0.95);
+}
+.msg-list-leave-to {
+  opacity: 0;
+  transform: translateY(-15px);
 }
 
-/* Custom Scrollbar for Chat Area */
-.custom-scrollbar::-webkit-scrollbar {
+/* Typing dots animation */
+.typing-dot {
+  animation: typingBounce 1.4s infinite ease-in-out both;
+}
+
+@keyframes typingBounce {
+  0%, 80%, 100% {
+    transform: scale(0);
+    opacity: 0.3;
+  }
+  40% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+/* Custom scrollbar for messages */
+#chatbot-messages::-webkit-scrollbar {
   width: 5px;
 }
-.custom-scrollbar::-webkit-scrollbar-track {
+#chatbot-messages::-webkit-scrollbar-track {
   background: transparent;
 }
-.custom-scrollbar::-webkit-scrollbar-thumb {
-  background: rgba(156, 163, 175, 0.4);
-  border-radius: 10px;
+#chatbot-messages::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 9999px;
 }
-.custom-scrollbar::-webkit-scrollbar-thumb:hover {
-  background: rgba(99, 102, 241, 0.8);
+#chatbot-messages::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
+}
+
+/* Markdown prose formatting */
+:deep(strong) {
+  color: #1e40af;
+  font-weight: 700;
 }
 </style>
