@@ -119,6 +119,7 @@ export const createSkillSprintReply = async ({ messages, env = process.env }) =>
     }),
   })
 
+
   const responseText = await groqResponse.text()
   const data = responseText ? JSON.parse(responseText) : {}
 
