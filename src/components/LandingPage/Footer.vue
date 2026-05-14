@@ -1,67 +1,50 @@
 <template>
-  <footer class="w-full bg-white pt-10 px-6 md:px-8 border-t border-gray-100 pb-10">
+  <footer class="w-full bg-white border-t border-gray-100 pt-10 pb-8 px-4 sm:px-6 md:px-8">
     <div class="max-w-7xl mx-auto">
-      <!-- Links Section: only 3 columns -->
-       <div class="grid grid-cols-2 sm:grid-cols-3 gap-x-8 gap-y-8 mb-8">
-        <div 
-          v-for="(section, i) in footerLinks" 
-          :key="i" 
-          class="flex flex-col gap-2"
-        >
-          <h3 class="text-gray-800 font-extrabold text-sm">
-            {{ section.title }}
-          </h3>
-          <router-link 
-            v-for="(link, index) in section.links" 
-            :key="index"
-            :to="link.url"
-            :target="link.target || '_self'"
-            class="text-gray-500 text-sm font-sm hover:text-blue-600 transition-all duration-300 hover:translate-x-1"
+
+      <!-- 4-column link grid -->
+      <div class="grid grid-cols-2 sm:grid-cols-4 gap-x-6 gap-y-8 mb-10">
+        <div v-for="(section, i) in footerLinks" :key="i" class="flex flex-col gap-2.5">
+          <h3 class="text-gray-900 font-extrabold text-sm tracking-wide">{{ section.title }}</h3>
+          <component
+            v-for="(link, j) in section.links"
+            :key="j"
+            :is="link.external ? 'a' : 'router-link'"
+            v-bind="link.external ? { href: link.url, target: '_blank', rel: 'noopener noreferrer' } : { to: link.url }"
+            class="text-gray-500 text-sm hover:text-blue-600 transition-colors duration-200 w-fit"
           >
             {{ link.label }}
-          </router-link>
+          </component>
         </div>
       </div>
 
       <!-- Divider -->
-      <div class="border-t border-gray-200 my-6"></div>
+      <div class="border-t border-gray-100 my-6"></div>
 
-      <!-- Bottom Section -->
-<div class="flex flex-col sm:flex-row sm:justify-between items-center gap-6">
+      <!-- Bottom row -->
+      <div class="flex flex-col sm:flex-row sm:justify-between items-center gap-5">
 
-  <!-- Left: Logo -->
-  <div class="flex flex-col items-center sm:items-start">
-    <img 
-      src="/logo.png" 
-      alt="Skill Sprint Logo" 
-      class="w-[150px] h-auto mb-1"
-    />
-    <p class="text-gray-500 text-sm leading-tight">
-      © 2026, All Rights Reserved
-    </p>
-  </div>
+        <!-- Logo + copyright -->
+        <div class="flex flex-col items-center sm:items-start gap-1">
+          <img src="/navlogo.png" alt="Skill Sprint" class="w-[110px] h-auto" />
+          <p class="text-gray-400 text-xs">© 2026, All Rights Reserved</p>
+        </div>
 
-  <!-- Right: Icons + Links -->
-  <div class="flex flex-col items-center sm:items-end gap-3">
+        <!-- Right side: social + legal -->
+        <div class="flex flex-col items-center sm:items-end gap-3">
+          <div class="flex gap-5 text-base text-gray-400">
+            <a href="#" aria-label="Instagram" class="hover:text-blue-600 transition"><i class="fab fa-instagram"></i></a>
+            <a href="#" aria-label="TikTok" class="hover:text-blue-600 transition"><i class="fab fa-tiktok"></i></a>
+            <a href="#" aria-label="YouTube" class="hover:text-red-600 transition"><i class="fab fa-youtube"></i></a>
+          </div>
+          <div class="flex gap-4 text-xs text-gray-400">
+            <a href="/privacy" class="hover:text-blue-600 transition">Privacy Policy</a>
+            <span class="text-gray-200">|</span>
+            <a href="/licenses" class="hover:text-blue-600 transition">Licenses</a>
+          </div>
+        </div>
 
-    <!-- Social Icons -->
-    <div class="flex gap-5 text-lg text-gray-600">
-      <a href="#" class="hover:text-blue-600 transition"><i class="fab fa-instagram"></i></a>
-      <a href="#" class="hover:text-blue-600 transition"><i class="fab fa-facebook"></i></a>
-      <a href="#" class="hover:text-blue-600 transition"><i class="fab fa-linkedin"></i></a>
-    </div>
-
-    <!-- Links Below Icons -->
-    <div class="flex gap-4 text-sm text-gray-500">
-      <a href="/privacy" class="hover:text-blue-600 transition">Privacy  Policy</a>
-      <a href="/licenses" class="hover:text-blue-600 transition">License</a>
-    </div>
-
-  </div>
-
-</div>
-
-
+      </div>
     </div>
   </footer>
 </template>
@@ -69,29 +52,38 @@
 <script setup>
 const footerLinks = [
   {
-    title: "Menu",
+    title: 'Menu',
     links: [
-      { label: "Community", url: "/approach" },
-      { label: "Our Team", url: "/instructor" },
-      { label: "Sprints", url: "/curriculum" },
-      { label: "About Us", url: "/pricing" },
+      { label: 'Approach',   url: '/' },
+      { label: 'Instructor', url: '/' },
+      { label: 'Curriculum', url: '/' },
+      { label: 'Pricing',    url: '/' },
     ],
   },
   {
-    title: "Support",
+    title: 'Support',
     links: [
-      { label: "Contact Us", url: "/contact-us" },
-      { label: "Live Chat", url: "/chat" },
-      { label: "Help Center", url: "/help" },
+      { label: 'Email Us',   url: '/contact-us' },
+      { label: 'Telegram',   url: '/', external: true },
+      { label: 'Live Chat',  url: '/' },
+      { label: 'Help Center',url: '/' },
     ],
   },
   {
-    title: "Explore",
+    title: 'Follow',
     links: [
-      { label: "Templates", url: "/templates" },
-      { label: "NutsDev", url: "/nutsdev" },
-      { label: "Temply", url: "/temply" },
+      { label: 'Instagram', url: 'https://instagram.com', external: true },
+      { label: 'TikTok',    url: 'https://tiktok.com',   external: true },
+      { label: 'YouTube',   url: 'https://youtube.com',  external: true },
     ],
-  }
+  },
+  {
+    title: 'Explore',
+    links: [
+      { label: 'Templates', url: '/' },
+      { label: 'NutsDev',   url: '/' },
+      { label: 'Temply',    url: '/' },
+    ],
+  },
 ]
 </script>

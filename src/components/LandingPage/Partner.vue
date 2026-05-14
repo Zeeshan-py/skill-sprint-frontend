@@ -1,45 +1,55 @@
 <template>
-  <section class="relative w-full py-20 bg-gradient-to-b from-[#F8FAFC] via-[#e6f0fa] to-[#bcd4ea] overflow-hidden">
-    <!-- Content Wrapper -->
-    <div class="relative max-w-7xl mx-auto px-6 flex justify-center">
+  <!-- Partner CTA — matches Figma gradient + robot overlap -->
+  <section class="relative w-full bg-gradient-to-b from-[#F8FAFC] via-[#dceeff] to-[#b8d4f0] py-16 sm:py-20 overflow-hidden">
+    <div class="max-w-5xl mx-auto px-4 sm:px-6">
 
       <!-- Card -->
-      <div class="relative w-full bg-white rounded-3xl shadow-lg px-6 sm:px-10 py-12 sm:py-16 text-center z-10">
-        
-        <!-- Text -->
-        <h2 class="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-900 leading-snug">
-          Partner with 
-          <span class="text-blue-600 relative inline-block" >
-            Skill Sprint
-            <span class="absolute left-0 -bottom-1 w-full h-[2px] sm:h-[3px] bg-blue-500 rotate-[-3deg]"></span>
-            <span class="absolute left-0 -bottom-2 w-full h-[2px] sm:h-[3px] bg-blue-500 rotate-[-3deg]"></span>
+      <div class="relative bg-white rounded-3xl shadow-lg px-6 sm:px-10 py-12 sm:py-16 text-center overflow-hidden">
 
-          </span>
-        </h2>
+        <!-- Robot image — right side, partially clipped on mobile -->
+        <div class="absolute right-0 bottom-0 pointer-events-none select-none" aria-hidden="true">
+          <img
+            src="/sidelogo.png"
+            alt=""
+            class="w-32 sm:w-48 md:w-64 h-auto object-contain opacity-90"
+            style="transform: rotate(-15deg) translate(20%, 15%);"
+          />
+        </div>
 
-        <p class="text-gray-600 mt-3 text-sm sm:text-base md:text-lg leading-relaxed">
-          Collaborate with us to empower students globally.
-        </p>
+        <!-- Content -->
+        <div class="relative z-10">
+          <h2 class="text-2xl sm:text-3xl md:text-4xl font-extrabold text-gray-900 leading-snug">
+            Partner with
+            <span class="text-blue-600 relative inline-block ml-1">
+              Skill Sprint
+              <span class="absolute left-0 -bottom-1 w-full h-[2px] bg-blue-500 rotate-[-2deg]"></span>
+              <span class="absolute left-0 -bottom-[6px] w-[85%] h-[2px] bg-blue-400 rotate-[-2deg]"></span>
+            </span>
+          </h2>
 
-        <button class="mt-6 bg-blue-600 text-white px-4 sm:px-6 py-2 sm:py-3 rounded-full text-sm sm:text-base font-medium shadow hover:bg-blue-700 transition">
-          Let’s build together  <span class="inline-block brightness-[6] grayscale contrast-[0.9] sepia-[2]">🤝</span>
+          <p class="text-gray-500 mt-3 text-sm sm:text-base max-w-sm mx-auto leading-relaxed">
+            Collaborate with us to empower students globally.
+          </p>
 
-        </button>
+          <div class="flex flex-col sm:flex-row items-center justify-center gap-3 mt-8">
+            <button
+              class="w-full sm:w-auto bg-blue-600 hover:bg-blue-700 active:scale-95 text-white font-semibold
+                     px-8 py-3 rounded-full text-sm transition-all duration-200 shadow-md shadow-blue-200"
+              aria-label="Join the Sprint"
+            >
+              Join the Sprint
+            </button>
+            <button
+              class="w-full sm:w-auto bg-white border-2 border-gray-200 hover:border-blue-400 hover:text-blue-600
+                     text-gray-700 font-semibold px-8 py-3 rounded-full text-sm transition-all duration-200"
+              aria-label="Contact us"
+            >
+              Contact us
+            </button>
+          </div>
+        </div>
+
       </div>
-
-      <!-- LOGO (OVERLAPPING & ANGLED) -->
-      <div class="absolute right-[-120px] z-10 sm:right-[-200px] md:right-[-300px] top-1/2 -translate-y-1/2 pointer-events-none">
-        <img 
-          src="/sidelogo.png" 
-          alt="logo"
-          class="w-[200px] sm:w-[350px] md:w-[600px] h-auto object-contain rotate-[-50deg]"
-        />
-      </div>
-
     </div>
   </section>
 </template>
-
-<script setup>
-// no script needed
-</script>

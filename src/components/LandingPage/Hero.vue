@@ -1,87 +1,96 @@
 <template>
-  <section class="relative bg-[#F8FAFC] pt-16 md:pt-20 pb-10 text-center px-4 overflow-hidden">
-    
-    <!-- Floating Cards (only large screens) -->
-    <div class="hidden xl:block">
-      
-      <!-- Left Top -->
-      <div class="absolute left-[28%] top-[20%] -translate-x-32 -translate-y-16 rotate-[-12deg]
-                  bg-white shadow-md px-3 py-1 rounded-full border border-gray-100
-                  text-xs font-medium font-handlee tracking-wide italic">
-        💪 flex but deserved
-      </div>
+  <section class="relative bg-[#F8FAFC] pt-10 sm:pt-14 md:pt-20 pb-10 md:pb-16 text-center px-4 overflow-hidden">
 
-      <!-- Right Top -->
-      <div class="absolute right-[28%] top-[20%] translate-x-32 -translate-y-16 rotate-[12deg]
-                  bg-white shadow-md px-3 py-1 rounded-full border border-gray-100
-                  text-xs font-medium font-handlee tracking-wide italic">
+    <!-- Floating Annotation Tags (hidden on mobile, show from sm) -->
+    <div class="hidden sm:block pointer-events-none select-none" aria-hidden="true">
+      <!-- Left top -->
+      <div class="absolute left-4 md:left-[8%] lg:left-[14%] top-[14%] -rotate-6
+                  bg-white shadow-sm px-3 py-1.5 rounded-full border border-gray-200
+                  text-[11px] font-medium tracking-wide text-gray-600" style="font-family: 'Handlee', cursive;">
+        ⏳ portfolio loading…
+      </div>
+      <!-- Right top -->
+      <div class="absolute right-4 md:right-[8%] lg:right-[14%] top-[10%] rotate-6
+                  bg-white shadow-sm px-3 py-1.5 rounded-full border border-gray-200
+                  text-[11px] font-medium tracking-wide text-gray-600" style="font-family: 'Handlee', cursive;">
         🧠 real projects, real panic
       </div>
-
-      <!-- Left Bottom -->
-      <div class="absolute left-[25%] top-[32%] -translate-x-36 rotate-[18deg]
-                  bg-white shadow-md px-3 py-1 rounded-full border border-gray-100
-                  text-xs font-medium font-handlee tracking-wide italic">
-           ⏳ portfolio Loading
+      <!-- Left bottom -->
+      <div class="absolute left-2 md:left-[6%] lg:left-[11%] top-[26%] rotate-12
+                  bg-white shadow-sm px-3 py-1.5 rounded-full border border-gray-200
+                  text-[11px] font-medium tracking-wide text-gray-600" style="font-family: 'Handlee', cursive;">
+        💪🏼 flex but deserved
       </div>
-
-      <!-- Right Bottom -->
-      <div class="absolute right-[23%] top-[32%] translate-x-36 rotate-[-15deg]
-                  bg-white shadow-md px-3 py-1 rounded-full border border-gray-100
-                  text-xs font-medium font-handlee tracking-wide italic">
-       🔖 better than doomscalling
+      <!-- Right bottom -->
+      <div class="absolute right-2 md:right-[6%] lg:right-[11%] top-[28%] -rotate-9
+                  bg-white shadow-sm px-3 py-1.5 rounded-full border border-gray-200
+                  text-[11px] font-medium tracking-wide text-gray-600" style="font-family: 'Handlee', cursive;">
+        🔖 better than doomscrolling
       </div>
-
     </div>
 
     <!-- Heading -->
-    <h2 class="text-3xl sm:text-4xl md:text-6xl lg:text-7xl font-bold text-dark leading-tight mb-4">
-      Learn by doing <br />
-      <span class="text-dark">Build by collaborating</span>
-    </h2>
-    
-    <!-- Paragraph -->
-    <p class="max-w-xl md:max-w-2xl mx-auto text-gray-500 text-sm sm:text-base md:text-lg mb-8 leading-relaxed">
-      A student-driven community where learners connect, collaborate on projects, and grow together.
-    </p>
+    <div class="relative z-10">
+      <h1 class="text-[2.4rem] sm:text-5xl md:text-6xl lg:text-7xl font-extrabold text-gray-900 leading-[1.1] tracking-tight mb-4">
+        Learn by doing<br />
+        <span class="text-gray-900">Build by collaborating</span>
+      </h1>
 
-    <!-- Buttons -->
-    <div class="flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-4 mb-12 md:mb-16">
-      <button class="w-full sm:w-auto px-6 md:px-8 py-2 md:py-3 rounded-full bg-gray-200 text-gray-700 font-medium hover:bg-gray-300 transition">
-        I'm in
-      </button>
-      <button class="w-full sm:w-auto px-6 md:px-8 py-2 md:py-3 rounded-full bg-blue-600 text-white font-medium hover:bg-blue-700 transition flex items-center justify-center gap-2">
-        See What We're Building 👀
-      </button>
-    </div>
+      <!-- Subtext -->
+      <p class="max-w-xs sm:max-w-sm md:max-w-2xl mx-auto text-gray-500 text-sm sm:text-base md:text-lg mb-8 leading-relaxed px-2">
+        A student-driven community where learners connect, collaborate on projects, and grow together.
+      </p>
 
-    <!-- Image Cards -->
-    <div class="flex justify-center gap-3 sm:gap-4 md:-space-x-10 opacity-90 overflow-x-auto md:overflow-visible px-2">
-      <div 
-        v-for="(img, i) in images" 
-        :key="i"
-        class="min-w-[120px] sm:min-w-[140px] md:w-52 h-30 sm:h-40 md:h-60 
-               border-3 border-white bg-gray-200 rounded-2xl md:rounded-3xl 
-               shadow-lg md:shadow-xl overflow-hidden 
-               transform transition duration-300 hover:scale-105"
-        :class="i % 2 === 0 ? 'md:rotate-3 md:translate-y-4' : 'md:-rotate-3'"
-      >
-        <img :src="img" class="w-full h-full object-cover" />
+      <!-- CTA Buttons -->
+      <div class="flex flex-row items-center justify-center gap-3 mb-10 md:mb-14">
+        <router-link to="/contact-us">
+          <button class="px-6 sm:px-8 py-2.5 sm:py-3 rounded-full bg-blue-600 text-white text-sm sm:text-base font-semibold hover:bg-blue-700 active:scale-95 transition-all duration-200 shadow-md shadow-blue-200">
+            Join the Sprint
+          </button>
+        </router-link>
+        <router-link to="/contact-us">
+          <button class="px-6 sm:px-8 py-2.5 sm:py-3 rounded-full bg-white border border-gray-300 text-gray-700 text-sm sm:text-base font-semibold hover:bg-gray-50 active:scale-95 transition-all duration-200">
+            Contact us
+          </button>
+        </router-link>
       </div>
     </div>
 
+    <!-- Image Cards Row -->
+    <div class="relative z-10 w-full overflow-x-auto pb-3 -mx-4 px-4" style="-webkit-overflow-scrolling: touch; scrollbar-width: none;">
+      <div class="flex gap-3 sm:gap-4 md:justify-center md:flex-wrap w-max md:w-full mx-auto">
+        <div
+          v-for="(img, i) in images"
+          :key="i"
+          class="flex-shrink-0 w-[130px] sm:w-[160px] md:w-[200px] h-[100px] sm:h-[130px] md:h-[160px]
+                 rounded-2xl md:rounded-3xl overflow-hidden bg-gray-200 border-2 border-white
+                 shadow-lg transition-transform duration-300 hover:scale-[1.03]"
+          :class="[
+            i === 0 ? 'md:rotate-2 md:translate-y-3' : '',
+            i === 1 ? 'md:-rotate-2' : '',
+            i === 2 ? 'md:rotate-3 md:translate-y-4' : '',
+            i === 3 ? 'md:-rotate-1' : '',
+          ]"
+        >
+          <img :src="img.src" :alt="img.alt" class="w-full h-full object-cover" loading="lazy" />
+        </div>
+      </div>
+    </div>
   </section>
 </template>
 
 <script setup>
 const images = [
-  "/Speaker.jpg.jpeg",
-  "Short Group.jpg.jpeg",
-  "/Long Group.jpg.jpeg",
-  "/Crowd.JPG.jpeg"
+  { src: '/Speaker.jpg.jpeg', alt: 'Speaker at Skill Sprint event' },
+  { src: '/Short Group.jpg.jpeg', alt: 'Group of Skill Sprint students' },
+  { src: '/Long Group.jpg.jpeg', alt: 'Large Skill Sprint community group' },
+  { src: '/Crowd.JPG.jpeg', alt: 'Skill Sprint event crowd' },
 ]
 </script>
 
-<style>
-@import url('https://fonts.googleapis.com/css2?family=Handlee&display=swap');
+<style scoped>
+/* Hide scrollbar for image row */
+div::-webkit-scrollbar {
+  display: none;
+}
 </style>
