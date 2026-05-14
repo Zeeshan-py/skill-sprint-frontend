@@ -2,7 +2,7 @@
   <section class="bg-[#0B101B] py-16 sm:py-20 md:py-28 px-4 sm:px-6 overflow-hidden">
 
     <!-- Heading -->
-    <div class="max-w-3xl mx-auto text-center mb-14 md:mb-20">
+    <div class="max-w-3xl mx-auto text-center mb-14 md:mb-20 reveal-hidden">
       <h2 class="text-white text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-extrabold tracking-tight mb-3">
         Why Skill Sprint Exists?
       </h2>
@@ -15,8 +15,13 @@
     <div class="relative max-w-4xl mx-auto">
 
       <!-- Mobile: simple vertical stack -->
-      <div class="flex flex-col gap-5 md:hidden">
-        <div v-for="card in cards" :key="card.label" class="bg-white rounded-2xl p-6 shadow-xl w-full max-w-sm mx-auto">
+      <div class="flex flex-col gap-5 md:hidden w-full break-words whitespace-normal">
+        <div
+          v-for="(card, i) in cards"
+          :key="card.label"
+          class="bg-white rounded-2xl p-6 shadow-xl w-full max-w-sm mx-auto reveal-hidden"
+          :class="[`reveal-delay-${i + 1}`]"
+        >
           <div class="bg-blue-600 w-11 h-11 rounded-xl flex items-center justify-center mb-5 shadow-md">
             <span class="text-lg brightness-[6] grayscale contrast-[0.9] sepia-[2]">{{ card.icon }}</span>
           </div>
@@ -33,7 +38,8 @@
         <div
           v-for="(card, i) in cards"
           :key="card.label"
-          class="absolute bg-white rounded-2xl p-6 shadow-2xl flex flex-col transition-all duration-500 hover:z-30 hover:scale-105"
+          class="absolute bg-white rounded-2xl p-6 shadow-2xl flex flex-col transition-all duration-500 hover:z-30 hover:scale-105 reveal-hidden"
+          :class="[`reveal-delay-${i + 1}`]"
           :style="card.desktopStyle"
         >
           <div class="bg-blue-600 w-12 h-12 rounded-xl flex items-center justify-center mb-5 shadow-lg">

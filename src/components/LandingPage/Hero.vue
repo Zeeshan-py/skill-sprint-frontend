@@ -58,18 +58,18 @@
 
     <!-- Image Cards Row -->
     <div class="relative z-10 w-full overflow-x-auto pb-3 -mx-4 px-4" style="-webkit-overflow-scrolling: touch; scrollbar-width: none;">
-      <div class="flex gap-3 sm:gap-4 md:justify-center md:flex-wrap w-max md:w-full mx-auto">
+      <div class="flex gap-3 sm:gap-4 md:justify-center md:flex-wrap w-max md:w-full mx-auto flex-wrap">
         <div
           v-for="(img, i) in images"
           :key="i"
-          class="flex-shrink-0 w-[130px] sm:w-[160px] md:w-[200px] h-[100px] sm:h-[130px] md:h-[160px]
+          class="flex-shrink-0 w-[100px] sm:w-[130px] md:w-[200px] h-[80px] sm:h-[100px] md:h-[160px]
                  rounded-2xl md:rounded-3xl overflow-hidden bg-gray-200 border-2 border-white
-                 shadow-lg transition-transform duration-300 hover:scale-[1.03]"
-          :class="[
-            i === 0 ? 'md:rotate-2 md:translate-y-3' : '',
-            i === 1 ? 'md:-rotate-2' : '',
-            i === 2 ? 'md:rotate-3 md:translate-y-4' : '',
-            i === 3 ? 'md:-rotate-1' : '',
+                 shadow-lg transition-transform duration-300 hover:scale-[1.03] reveal-hidden"
+          :class=" [
+            i === 0 ? 'md:rotate-2 md:translate-y-3 reveal-delay-1' : '',
+            i === 1 ? 'md:-rotate-2 reveal-delay-2' : '',
+            i === 2 ? 'md:rotate-3 md:translate-y-4 reveal-delay-3' : '',
+            i === 3 ? 'md:-rotate-1 reveal-delay-4' : '',
           ]"
         >
           <img :src="img.src" :alt="img.alt" class="w-full h-full object-cover" loading="lazy" />

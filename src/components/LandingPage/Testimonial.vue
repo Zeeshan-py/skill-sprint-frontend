@@ -19,11 +19,11 @@
     </div>
 
     <!-- Mobile: simple card list -->
-    <div class="flex flex-col gap-4 max-w-sm mx-auto md:hidden">
+    <div class="flex flex-col gap-4 max-w-sm mx-auto md:hidden w-full px-4">
       <div
         v-for="(t, i) in testimonials"
         :key="i"
-        class="bg-white border border-gray-100 shadow-md p-6 rounded-2xl"
+        class="bg-white border border-gray-100 shadow-md p-6 rounded-2xl w-full"
       >
         <p class="text-gray-600 text-[15px] leading-relaxed mb-5 italic">
           "{{ t.quote }}"

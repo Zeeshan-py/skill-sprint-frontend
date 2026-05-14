@@ -31,7 +31,7 @@
             Collaborate with us to empower students globally.
           </p>
 
-          <div class="flex flex-col sm:flex-row items-center justify-center gap-3 mt-8">
+          <div class="flex flex-wrap gap-3 sm:gap-4 justify-center items-center">
             <button
               class="w-full sm:w-auto bg-blue-600 hover:bg-blue-700 active:scale-95 text-white font-semibold
                      px-8 py-3 rounded-full text-sm transition-all duration-200 shadow-md shadow-blue-200"
